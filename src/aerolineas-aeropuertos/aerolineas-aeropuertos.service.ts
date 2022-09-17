@@ -9,7 +9,6 @@ import {BusinessError, BusinessLogicException} from "../shared/errors/BusinessEr
 @Injectable()
 export class AerolineasAeropuertosService {
 
-
     constructor(
         @InjectRepository(AerolineaEntity)
         private readonly aerolineaRepository: Repository<AerolineaEntity>,
@@ -87,6 +86,20 @@ export class AerolineasAeropuertosService {
             throw new BusinessLogicException("El aeropuerto que se desea borrar no esta asociado a una aerolinea", BusinessError.PRECONDITION_FAILED)
 
         aerolinea.aeropuertos = aerolinea.aeropuertos.filter(e => e.id !== aeropuertoID);
+        await this.aerolineaRepository.save(aerolinea);
+    }
+
+    async borrarAeropuertosAerolinea(aerolineaID: string){
+
+        const aerolinea: AerolineaEntity = await this.aerolineaRepository.findOne({where: {id: aerolineaID}, relations: ["aeropuertos"]});
+        if (!aerolinea)
+            throw new BusinessLogicException("La aerolinea no se encontró", BusinessError.NOT_FOUND)
+
+
+        if (aerolinea.aeropuertos.length == 0)
+            throw new BusinessLogicException("La aerolinea no tiene asociado aeropuertos", BusinessError.PRECONDITION_FAILED)
+
+        aerolinea.aeropuertos = [];
         await this.aerolineaRepository.save(aerolinea);
     }
 }

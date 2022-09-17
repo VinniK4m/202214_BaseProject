@@ -34,12 +34,15 @@ export class AeropuertoService {
                 'El código del aeropuerto debe ser 3',
                 BusinessError.NOT_FOUND,
             );
-
-
         return await this.AeropuertoEntity.save(aeropuerto);
     }
 
     async update(id: string, aeropuerto: AeropuertoEntity): Promise<AeropuertoEntity> {
+        if (aeropuerto.codigo.length != 3)
+            throw new BusinessLogicException(
+                'El código del aeropuerto debe ser 3',
+                BusinessError.NOT_FOUND,
+            );
         const persistedAeropuerto: AeropuertoEntity = await this.AeropuertoEntity.findOne({
             where: { id },
         });

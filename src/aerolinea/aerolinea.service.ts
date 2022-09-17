@@ -39,6 +39,12 @@ export class AerolineaService {
     }
 
     async update(id: string, aerolinea: AerolineaEntity): Promise<AerolineaEntity> {
+        const hoy = new Date();
+        if (aerolinea.fechaFundacion > hoy)
+            throw new BusinessLogicException(
+                'La fecha de fundación de la aerolinea no puede ser futura',
+                BusinessError.NOT_FOUND,
+            );
         const persisteAerolinea: AerolineaEntity = await this.aerolineaEntity.findOne({
             where: { id },
         });
