@@ -48,7 +48,7 @@ export class AerolineasAeropuertosService {
         return aerolineaAeropuerto;
     }
 
-    async buscaraeropuertosXAerolineaCodigo(aerolineaID: string): Promise<AeropuertoEntity[]> {
+    async buscarAeropuertosXAerolineaCodigo(aerolineaID: string): Promise<AeropuertoEntity[]> {
         const aerolinea: AerolineaEntity = await this.aerolineaRepository.findOne({where: {id: aerolineaID}, relations: ["aeropuertos"]});
         if (!aerolinea)
             throw new BusinessLogicException("La aerolinea no se encontró", BusinessError.NOT_FOUND)
@@ -56,7 +56,7 @@ export class AerolineasAeropuertosService {
         return aerolinea.aeropuertos;
     }
 
-    async asociaraeropuertosAerolinea(aerolineaID: string, aeropuertos: AeropuertoEntity[]): Promise<AerolineaEntity> {
+    async asociarAeropuertosAerolinea(aerolineaID: string, aeropuertos: AeropuertoEntity[]): Promise<AerolineaEntity> {
         const aerolinea: AerolineaEntity = await this.aerolineaRepository.findOne({where: {id: aerolineaID}, relations: ["aeropuertos"]});
 
         if (!aerolinea)

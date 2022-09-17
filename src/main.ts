@@ -12,6 +12,7 @@ async function bootstrap() {
     defaultVersion: '1',
   });
 
+
   const config = new DocumentBuilder()
       .setTitle('Parcial Example')
       .setDescription('Parcial API descripción')
