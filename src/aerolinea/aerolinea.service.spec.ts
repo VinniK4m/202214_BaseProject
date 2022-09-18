@@ -61,12 +61,12 @@ describe('AerolineaService', () => {
   });
 
   it('findOne should throw an exception for an invalid aerolinea', async () => {
-    await expect(() => service.findOne("10")).rejects.toHaveProperty("message", "La aerolinea que consulta no existe")
+    await expect(() => service.findOne(10)).rejects.toHaveProperty("message", "La aerolinea que consulta no existe")
   });
 
   it('create should return a new aerolinea', async () => {
     const aerolinea: AerolineaEntity = {
-      id: "0",
+      id: 0,
       nombre: faker.company.name(),
       descripcion: faker.lorem.paragraph(),
       fechaFundacion: faker.date.past(),
@@ -87,10 +87,10 @@ describe('AerolineaService', () => {
 
   it('create should return a new aerolinea with future date', async () => {
     const aerolinea: AerolineaEntity = {
-      id: "0",
+      id: 0,
       nombre: faker.company.name(),
       descripcion: faker.lorem.paragraph(),
-      fechaFundacion: faker.date.future(1),
+      fechaFundacion: faker.date.future(2),
       paginaWeb: faker.image.imageUrl(),
       aeropuertos: [],
     }
@@ -122,7 +122,7 @@ describe('AerolineaService', () => {
     aerolinea = {
       ...aerolinea, nombre: "nuevo nombre", descripcion: "nueva descripcion"
     }
-    await expect(() => service.update("10", aerolinea)).rejects.toHaveProperty("message", "La aerolinea que actualiza no existe")
+    await expect(() => service.update(10, aerolinea)).rejects.toHaveProperty("message", "La aerolinea que actualiza no existe")
   });
 
   it('delete should remove a aerolinea', async () => {
@@ -136,6 +136,6 @@ describe('AerolineaService', () => {
   it('delete should throw an exception for an invalid aerolinea', async () => {
     const aerolinea: AerolineaEntity = aerolineaList[0];
     await service.delete(aerolinea.id);
-    await expect(() => service.delete("0")).rejects.toHaveProperty("message", "La aerolinea que borra no existe")
+    await expect(() => service.delete(0)).rejects.toHaveProperty("message", "La aerolinea que borra no existe")
   });
 });

@@ -13,12 +13,10 @@ export class AerolineaService {
     ) {}
 
     async findAll(): Promise<AerolineaEntity[]> {
-        return await this.aerolineaEntity.find({
-
-        });
+        return await this.aerolineaEntity.find({relations: ['aeropuertos']});
     }
-    async findOne(id: string): Promise<AerolineaEntity> {
-        const aerolinea: AerolineaEntity = await this.aerolineaEntity.findOne({where: {id} } );
+    async findOne(id: number): Promise<AerolineaEntity> {
+        const aerolinea: AerolineaEntity = await this.aerolineaEntity.findOne({where: {id}, relations: ['aeropuertos'] } );
         if (!aerolinea)
             throw new BusinessLogicException(
                 'La aerolinea que consulta no existe',
@@ -30,7 +28,9 @@ export class AerolineaService {
 
     async create(aerolinea: AerolineaEntity): Promise<AerolineaEntity> {
         const hoy = new Date();
-        if (aerolinea.fechaFundacion > hoy)
+        const fundacion = new Date(aerolinea.fechaFundacion)
+
+        if (fundacion > hoy)
             throw new BusinessLogicException(
                 'La fecha de fundación de la aerolinea no puede ser futura',
                 BusinessError.NOT_FOUND,
@@ -38,9 +38,16 @@ export class AerolineaService {
         return await this.aerolineaEntity.save(aerolinea);
     }
 
-    async update(id: string, aerolinea: AerolineaEntity): Promise<AerolineaEntity> {
+    async update(id: number, aerolinea: AerolineaEntity): Promise<AerolineaEntity> {
+        const hoy = new Date();
+
+        if (aerolinea.fechaFundacion > hoy)
+            throw new BusinessLogicException(
+                'La fecha de fundación de la aerolinea no puede ser futura',
+                BusinessError.NOT_FOUND,
+            );
         const persisteAerolinea: AerolineaEntity = await this.aerolineaEntity.findOne({
-            where: { id },
+            where: { id }, relations: ['aeropuertos']
         });
         if (!persisteAerolinea)
             throw new BusinessLogicException(
@@ -52,9 +59,9 @@ export class AerolineaService {
 
         return await this.aerolineaEntity.save(aerolinea);
     }
-    async delete(id: string) {
+    async delete(id: number) {
         const aerolinea: AerolineaEntity = await this.aerolineaEntity.findOne({
-            where: { id },
+            where: { id }, relations: ['aeropuertos']
         });
         if (!aerolinea)
             throw new BusinessLogicException(

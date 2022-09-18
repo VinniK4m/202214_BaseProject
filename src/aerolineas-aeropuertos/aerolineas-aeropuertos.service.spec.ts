@@ -93,7 +93,7 @@ describe('AerolineasAeropuertosService', () => {
       paginaWeb: faker.image.imageUrl(),
     })
 
-    await expect(() => service.adicionarAeropuertoAerolinea(newAerolinea.id, "10")).rejects.toHaveProperty("message", "El aeropuerto no se encontró");
+    await expect(() => service.adicionarAeropuertoAerolinea(newAerolinea.id, 10)).rejects.toHaveProperty("message", "El aeropuerto no se encontró");
   });
 
   it('addaeropuertoaerolinea should throw an exception for an invalid aerolinea', async () => {
@@ -104,7 +104,7 @@ describe('AerolineasAeropuertosService', () => {
       pais: faker.address.country()
     });
 
-    await expect(() => service.adicionarAeropuertoAerolinea("10", newAeropuerto.id)).rejects.toHaveProperty("message", "La aerolinea no se encontró");
+    await expect(() => service.adicionarAeropuertoAerolinea(10, newAeropuerto.id)).rejects.toHaveProperty("message", "La aerolinea no se encontró");
   });
 
   it('findaeropuertoByaerolineaIdaeropuertoId should return aeropuerto by aerolinea', async () => {
@@ -117,12 +117,12 @@ describe('AerolineasAeropuertosService', () => {
   });
 
   it('findaeropuertoByaerolineaIdaeropuertoId should throw an exception for an invalid aeropuerto', async () => {
-    await expect(()=> service.buscarAeropuertoXAerolineaIDAeropuertoID(aerolinea.id, "10")).rejects.toHaveProperty("message", "El aeropuerto no se encontró");
+    await expect(()=> service.buscarAeropuertoXAerolineaIDAeropuertoID(aerolinea.id, 10)).rejects.toHaveProperty("message", "El aeropuerto no se encontró");
   });
 
   it('findaeropuertoByaerolineaIdaeropuertoId should throw an exception for an invalid aerolinea', async () => {
     const aeropuerto: AeropuertoEntity = aeropuertosList[0];
-    await expect(()=> service.buscarAeropuertoXAerolineaIDAeropuertoID("10", aeropuerto.id)).rejects.toHaveProperty("message", "La aerolinea no se encontró");
+    await expect(()=> service.buscarAeropuertoXAerolineaIDAeropuertoID(10, aeropuerto.id)).rejects.toHaveProperty("message", "La aerolinea no se encontró");
   });
 
   it('findaeropuertoByaerolineaIdaeropuertoId should throw an exception for an aeropuerto not associated to the aerolinea', async () => {
@@ -137,12 +137,12 @@ describe('AerolineasAeropuertosService', () => {
   });
 
   it('findaeropuertosByaerolineaId should return aeropuertos by aerolinea', async ()=>{
-    const aeropuertos: AeropuertoEntity[] = await service.buscaraeropuertosXAerolineaCodigo(aerolinea.id);
+    const aeropuertos: AeropuertoEntity[] = await service.buscarAeropuertosXAerolineaCodigo(aerolinea.id);
     expect(aeropuertos.length).toBe(5)
   });
 
   it('findaeropuertosByaerolineaId should throw an exception for an invalid aerolinea', async () => {
-    await expect(()=> service.buscaraeropuertosXAerolineaCodigo("10")).rejects.toHaveProperty("message", "La aerolinea no se encontró");
+    await expect(()=> service.buscarAeropuertosXAerolineaCodigo(10)).rejects.toHaveProperty("message", "La aerolinea no se encontró");
   });
 
   it('associateaeropuertosaerolinea should update aeropuertos list for a aerolinea', async () => {
@@ -153,7 +153,7 @@ describe('AerolineasAeropuertosService', () => {
       pais: faker.address.country()
     });
 
-    const aerolineaModificado: AerolineaEntity = await service.asociaraeropuertosAerolinea(aerolinea.id, [newAeropuerto]);
+    const aerolineaModificado: AerolineaEntity = await service.asociarAeropuertosAerolinea(aerolinea.id, [newAeropuerto]);
     expect(aerolineaModificado.aeropuertos.length).toBe(1);
 
     expect(aerolineaModificado.aeropuertos[0].codigo).toBe(newAeropuerto.codigo);
@@ -169,14 +169,14 @@ describe('AerolineasAeropuertosService', () => {
       pais: faker.address.country()
     });
 
-    await expect(()=> service.asociaraeropuertosAerolinea("10", [newAeropuerto])).rejects.toHaveProperty("message", "La aerolinea no se encontró");
+    await expect(()=> service.asociarAeropuertosAerolinea(10, [newAeropuerto])).rejects.toHaveProperty("message", "La aerolinea no se encontró");
   });
 
   it('associateaeropuertosaerolinea should throw an exception for an invalid aeropuerto', async () => {
     const newAeropuerto: AeropuertoEntity = aeropuertosList[0];
-    newAeropuerto.id = "10";
+    newAeropuerto.id = 10;
 
-    await expect(()=> service.asociaraeropuertosAerolinea(aerolinea.id, [newAeropuerto])).rejects.toHaveProperty("message", "El aeropuerto no se encontró");
+    await expect(()=> service.asociarAeropuertosAerolinea(aerolinea.id, [newAeropuerto])).rejects.toHaveProperty("message", "El aeropuerto no se encontró");
   });
 
   it('deleteaeropuertoToaerolinea should remove an aeropuerto from a aerolinea', async () => {
@@ -192,12 +192,49 @@ describe('AerolineasAeropuertosService', () => {
   });
 
   it('deleteaeropuertoToaerolinea should thrown an exception for an invalid aeropuerto', async () => {
-    await expect(()=> service.borrarAeropuertoAerolinea(aerolinea.id, "100")).rejects.toHaveProperty("message", "El aeropuerto no se encontró");
+    await expect(()=> service.borrarAeropuertoAerolinea(aerolinea.id, 100)).rejects.toHaveProperty("message", "El aeropuerto no se encontró");
   });
 
   it('deleteaeropuertoToaerolinea should thrown an exception for an invalid aerolinea', async () => {
     const aeropuerto: AeropuertoEntity = aeropuertosList[0];
-    await expect(()=> service.borrarAeropuertoAerolinea("101", aeropuerto.id)).rejects.toHaveProperty("message", "La aerolinea no se encontró");
+    await expect(()=> service.borrarAeropuertoAerolinea(101, aeropuerto.id)).rejects.toHaveProperty("message", "La aerolinea no se encontró");
+  });
+
+  it('deleteaeropuertosToaerolinea should remove all aeropuertos from a aerolinea', async () => {
+    aeropuertosList = [];
+    for(let i = 0; i < 5; i++){
+      const aeropuerto: AeropuertoEntity = await aeropuertoRepository.save({
+
+        nombre: faker.company.name(),
+        codigo: faker.random.alpha({ count: 3, casing: 'upper', bannedChars: ['A'] }),
+        ciudad: faker.address.city(),
+        pais: faker.address.country(),
+
+      })
+      aeropuertosList.push(aeropuerto);
+    }
+
+    aerolinea = await aerolineaRepository.save({
+      nombre: faker.company.name(),
+      descripcion: faker.lorem.paragraph(),
+      fechaFundacion: faker.date.past(),
+      paginaWeb: faker.image.imageUrl(),
+      aeropuertos: aeropuertosList
+    })
+    await service.borrarAeropuertosAerolinea(aerolinea.id)
+    const storedaerolinea: AerolineaEntity = await aerolineaRepository.findOne({where: {id: aerolinea.id}, relations: ["aeropuertos"]});
+    expect(storedaerolinea.aeropuertos.length).toBe(0)
+
+  });
+
+  it('deleteaeropuertosToaerolinea should thrown an exception for not airports', async () => {
+    const newAerolinea: AerolineaEntity = await aerolineaRepository.save({
+      nombre: faker.company.name(),
+      descripcion: faker.lorem.paragraph(),
+      fechaFundacion: faker.date.past(),
+      paginaWeb: faker.image.imageUrl(),
+    })
+    await expect(()=> service.borrarAeropuertosAerolinea(newAerolinea.id)).rejects.toHaveProperty("message", "La aerolinea no tiene asociado aeropuertos");
   });
 
   it('deleteaeropuertoToaerolinea should thrown an exception for an non asocciated aeropuerto', async () => {

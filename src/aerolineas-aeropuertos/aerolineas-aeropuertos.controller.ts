@@ -13,29 +13,29 @@ export class AerolineasAeropuertosController {
     constructor(private readonly aerolineasAeropuertosService: AerolineasAeropuertosService){}
 
     @Post(':aerolineaID/airports/:aeropuertoID')
-    async adici(@Param('aerolineaID') aerolineaID: string, @Param('aeropuertoID') aeropuertoID: string){
+    async adicionarAeropuertoAAerolinea(@Param('aerolineaID') aerolineaID: number, @Param('aeropuertoID') aeropuertoID: number){
         return await this.aerolineasAeropuertosService.adicionarAeropuertoAerolinea(aerolineaID, aeropuertoID);
     }
 
     @Get(':aerolineaID/airports/:aeropuertoID')
-    async buscarAeropuertoXaerolineaIDaeropuertoID(@Param('aerolineaID') aerolineaID: string, @Param('aeropuertoID') aeropuertoID: string){
+    async buscarAeropuertoXaerolineaIDaeropuertoID(@Param('aerolineaID') aerolineaID: number, @Param('aeropuertoID') aeropuertoID: number){
         return await this.aerolineasAeropuertosService.buscarAeropuertoXAerolineaIDAeropuertoID(aerolineaID, aeropuertoID);
     }
 
     @Get(':aerolineaID/airports')
-    async buscarAeropuertosXaerolineaID(@Param('aerolineaID') aerolineaID: string){
+    async buscarAeropuertosXaerolineaID(@Param('aerolineaID') aerolineaID: number){
         return await this.aerolineasAeropuertosService.buscarAeropuertosXAerolineaCodigo(aerolineaID);
     }
 
     @Put(':aerolineaID/airports')
-    async asociarAeropuertosAerolinea(@Body() aeropuertoDto: AeropuertoDto[], @Param('aerolineaID') aerolineaID: string){
+    async asociarAeropuertosAerolinea(@Body() aeropuertoDto: AeropuertoDto[], @Param('aerolineaID') aerolineaID: number){
         const aeropuertos = plainToInstance(AeropuertoEntity, aeropuertoDto)
         return await this.aerolineasAeropuertosService.asociarAeropuertosAerolinea(aerolineaID, aeropuertos);
     }
 
     @Delete(':aerolineaID/airports/:aeropuertoID')
     @HttpCode(204)
-    async borrarAeropuertoAerolinea(@Param('aerolineaID') aerolineaID: string, @Param('aeropuertoID') aeropuertoID: string){
+    async borrarAeropuertoAerolinea(@Param('aerolineaID') aerolineaID: number, @Param('aeropuertoID') aeropuertoID: number){
         return await this.aerolineasAeropuertosService.borrarAeropuertoAerolinea(aerolineaID, aeropuertoID);
     }
 }

@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 
-import {IsDate, IsNotEmpty, IsString} from 'class-validator';
+import {IsDateString, IsNotEmpty, IsString} from 'class-validator';
 
 export class AerolineaDto {
 
@@ -12,7 +12,8 @@ export class AerolineaDto {
     @IsNotEmpty()
     readonly descripcion: string;
 
-    @IsDate()
+    //@IsDate()
+    @IsDateString()
     @IsNotEmpty()
     readonly fechaFundacion: Date;
 
