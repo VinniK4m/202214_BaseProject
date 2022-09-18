@@ -17,20 +17,22 @@ export class AerolineasAeropuertosService {
         private readonly aeropuertoRepository: Repository<AeropuertoEntity>
     ) {}
 
-    async adicionarAeropuertoAerolinea(aerolineaID: string, aeropuertoID: string): Promise<AerolineaEntity> {
-        const aeropuerto: AeropuertoEntity = await this.aeropuertoRepository.findOne({where: {id: aeropuertoID}});
+
+    async adicionarAeropuertoAerolinea(aerolineaID: number, aeropuertoID: number): Promise<AerolineaEntity> {
+        const aeropuerto  = await this.aeropuertoRepository.findOne({where: {id: aeropuertoID}});
         if (!aeropuerto)
             throw new BusinessLogicException("El aeropuerto no se encontró", BusinessError.NOT_FOUND);
 
-        const aerolinea: AerolineaEntity = await this.aerolineaRepository.findOne({where: {id: aerolineaID}, relations: ["aeropuertos"]})
+
+        const aerolinea  = await this.aerolineaRepository.findOne({where: {id: aerolineaID}, relations: ["aeropuertos"]})
         if (!aerolinea)
             throw new BusinessLogicException("La aerolinea no se encontró", BusinessError.NOT_FOUND);
-
         aerolinea.aeropuertos = [...aerolinea.aeropuertos, aeropuerto];
+
         return await this.aerolineaRepository.save(aerolinea);
     }
 
-    async buscarAeropuertoXAerolineaIDAeropuertoID(aerolineaID: string, aeropuertoID: string): Promise<AeropuertoEntity> {
+    async buscarAeropuertoXAerolineaIDAeropuertoID(aerolineaID: number, aeropuertoID: number): Promise<AeropuertoEntity> {
         const aeropuerto: AeropuertoEntity = await this.aeropuertoRepository.findOne({where: {id: aeropuertoID}});
         if (!aeropuerto)
             throw new BusinessLogicException("El aeropuerto no se encontró", BusinessError.NOT_FOUND)
@@ -47,7 +49,7 @@ export class AerolineasAeropuertosService {
         return aerolineaAeropuerto;
     }
 
-    async buscarAeropuertosXAerolineaCodigo(aerolineaID: string): Promise<AeropuertoEntity[]> {
+    async buscarAeropuertosXAerolineaCodigo(aerolineaID: number): Promise<AeropuertoEntity[]> {
         const aerolinea: AerolineaEntity = await this.aerolineaRepository.findOne({where: {id: aerolineaID}, relations: ["aeropuertos"]});
         if (!aerolinea)
             throw new BusinessLogicException("La aerolinea no se encontró", BusinessError.NOT_FOUND)
@@ -55,7 +57,7 @@ export class AerolineasAeropuertosService {
         return aerolinea.aeropuertos;
     }
 
-    async asociarAeropuertosAerolinea(aerolineaID: string, aeropuertos: AeropuertoEntity[]): Promise<AerolineaEntity> {
+    async asociarAeropuertosAerolinea(aerolineaID: number, aeropuertos: AeropuertoEntity[]): Promise<AerolineaEntity> {
         const aerolinea: AerolineaEntity = await this.aerolineaRepository.findOne({where: {id: aerolineaID}, relations: ["aeropuertos"]});
 
         if (!aerolinea)
@@ -66,12 +68,11 @@ export class AerolineasAeropuertosService {
             if (!aeropuerto)
                 throw new BusinessLogicException("El aeropuerto no se encontró", BusinessError.NOT_FOUND)
         }
-
         aerolinea.aeropuertos = aeropuertos;
         return await this.aerolineaRepository.save(aerolinea);
     }
 
-    async borrarAeropuertoAerolinea(aerolineaID: string, aeropuertoID: string){
+    async borrarAeropuertoAerolinea(aerolineaID: number, aeropuertoID: number){
         const aeropuerto: AeropuertoEntity = await this.aeropuertoRepository.findOne({where: {id: aeropuertoID}});
         if (!aeropuerto)
             throw new BusinessLogicException("El aeropuerto no se encontró", BusinessError.NOT_FOUND)
@@ -89,7 +90,7 @@ export class AerolineasAeropuertosService {
         await this.aerolineaRepository.save(aerolinea);
     }
 
-    async borrarAeropuertosAerolinea(aerolineaID: string){
+    async borrarAeropuertosAerolinea(aerolineaID: number){
 
         const aerolinea: AerolineaEntity = await this.aerolineaRepository.findOne({where: {id: aerolineaID}, relations: ["aeropuertos"]});
         if (!aerolinea)

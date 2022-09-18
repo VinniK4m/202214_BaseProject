@@ -13,12 +13,10 @@ export class AeropuertoService {
     ) {}
 
     async findAll(): Promise<AeropuertoEntity[]> {
-        return await this.AeropuertoEntity.find({
-
-        });
+        return await this.AeropuertoEntity.find({   relations: ['aerolineas']     });
     }
-    async findOne(id: string): Promise<AeropuertoEntity> {
-        const aeropuerto: AeropuertoEntity = await this.AeropuertoEntity.findOne({where: {id} } );
+    async findOne(id: number): Promise<AeropuertoEntity> {
+        const aeropuerto: AeropuertoEntity = await this.AeropuertoEntity.findOne({where: {id}, relations: ['aerolineas']  } );
         if (!aeropuerto)
             throw new BusinessLogicException(
                 'El aeropuerto que consulta no existe',
@@ -37,14 +35,14 @@ export class AeropuertoService {
         return await this.AeropuertoEntity.save(aeropuerto);
     }
 
-    async update(id: string, aeropuerto: AeropuertoEntity): Promise<AeropuertoEntity> {
+    async update(id: number, aeropuerto: AeropuertoEntity): Promise<AeropuertoEntity> {
         if (aeropuerto.codigo.length != 3)
             throw new BusinessLogicException(
                 'El código del aeropuerto debe ser 3',
                 BusinessError.NOT_FOUND,
             );
         const persistedAeropuerto: AeropuertoEntity = await this.AeropuertoEntity.findOne({
-            where: { id },
+            where: { id }, relations: ['aerolineas']
         });
         if (!persistedAeropuerto)
             throw new BusinessLogicException(
@@ -56,9 +54,9 @@ export class AeropuertoService {
 
         return await this.AeropuertoEntity.save(aeropuerto);
     }
-    async delete(id: string) {
+    async delete(id: number) {
         const aeropuerto: AeropuertoEntity = await this.AeropuertoEntity.findOne({
-            where: { id },
+            where: { id }, relations: ['aerolineas']
         });
         if (!aeropuerto)
             throw new BusinessLogicException(

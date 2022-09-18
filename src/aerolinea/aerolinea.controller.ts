@@ -18,7 +18,7 @@ export class AerolineaController {
     }
 
     @Get(':aerolineaID')
-    async findOne(@Param('aerolineaID') aerolineaID: string) {
+    async findOne(@Param('aerolineaID') aerolineaID: number) {
         return await this.aerolineaService.findOne(aerolineaID);
     }
 
@@ -29,14 +29,14 @@ export class AerolineaController {
     }
 
     @Put(':aerolineaID')
-    async update(@Param('aerolineaID') aerolineaID: string, @Body() aerolineaDto: AerolineaDto) {
+    async update(@Param('aerolineaID') aerolineaID: number, @Body() aerolineaDto: AerolineaDto) {
         const aerolinea: AerolineaEntity = plainToInstance(AerolineaEntity, aerolineaDto);
         return await this.aerolineaService.update(aerolineaID, aerolinea);
     }
 
     @Delete(':aerolineaID')
     @HttpCode(204)
-    async delete(@Param('aerolineaID') aerolineaID: string) {
+    async delete(@Param('aerolineaID') aerolineaID: number) {
         return await this.aerolineaService.delete(aerolineaID);
     }
 }
